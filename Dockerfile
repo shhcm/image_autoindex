@@ -1,4 +1,8 @@
 FROM debian:jessie
+
+#If running on raspberry pi:
+#FROM armhf/debian:jessie
+
 MAINTAINER Alexander Machhaus
 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh # No sh, we want bash.
