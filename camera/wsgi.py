@@ -30,7 +30,7 @@ def list_images(path, page):
 def application(environ, start_response):
     status = '200 OK'
     get_params = parse_qs(environ['QUERY_STRING'])
-    page = int(get_params.get("page")[0])
+    page = int(get_params.get("page")[0]) if get_params.get("page") != None else 0
     output = bytes(list_images(path_to_images, page), "UTF-8")
     response_headers = [('Content-type', 'text/html'),
                         ('Content-Length', str(len(output)))]
