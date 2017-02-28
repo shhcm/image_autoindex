@@ -1,7 +1,8 @@
 from math import ceil
+from time import strftime, localtime
 from cgi import parse_qs
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, getctime
 
 # Displays the images given in the directory "path".
 # For pagination to work properly, images should have a timestamp in the filename, as the list is ordered by the filename.
@@ -18,12 +19,14 @@ def list_images(path, page):
    image_paths_sublist = image_paths[start_image:start_image + page_size]
    html_images = [ "<a href='" + s[16:] + "' ><img src='" + s[16:] + "' width=100 /></a>" for s in image_paths_sublist]
    pages = ceil(len(image_paths)/50)
-   page_links = [ "<a href='?page=0'>[1-50]</a>" ]
+   # Display link for every 50 images, show ctime of the first of those images.
+   page_links = [ "<a href='?page=0'>[" + strftime("%Y-%m-%d %H:%M",localtime(getctime(image_paths[1]))) + "]</a>" ]
    if pages > 1:
-      page_links.extend([ "<a href='?page=" + str(x) + "'>[" + str((x * 50) + 1) + "-" + str((x + 1) * 50) + "]</a>" for x in range(1,pages) ])
+      page_links.extend([ "<a href='?page=" + str(x) + "'>[" + strftime("%Y-%m-%d %H:%M",localtime(getctime(image_paths[x*50-49]))) + "]</a>" for x in range(1,pages) ])
 
    output = " ".join(html_images) \
             + "<p> Total: " + str(len(image_paths)) + "</p>" \
+            + "<p> Showing: " + str(start_image + 1) + "-" + str(start_image + page_size) + "</p>" \
             + " ".join(page_links)
    return output
 
@@ -36,4 +39,5 @@ def application(environ, start_response):
                         ('Content-Length', str(len(output)))]
     start_response(status, response_headers)
     return [output]
+
 
