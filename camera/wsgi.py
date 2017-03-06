@@ -4,6 +4,9 @@ from cgi import parse_qs
 from os import listdir
 from os.path import isfile, join, getctime
 
+import cv2
+import skimage
+
 # Displays the images given in the directory "path".
 # For pagination to work properly, images should have a timestamp in the filename, as the list is ordered by the filename.
 
@@ -17,7 +20,7 @@ def list_images(path, page):
    image_paths.sort()
    # Get sublist of images for current page.
    image_paths_sublist = image_paths[start_image:start_image + page_size]
-   html_images = [ "<a href='" + s[16:] + "' ><img src='" + s[16:] + "' width=100 /></a>" for s in image_paths_sublist]
+   html_images = [ "<a href='" + s[16:] + "' ><img src='" + s[16:] + "' width=200 /></a>" for s in image_paths_sublist]
    pages = ceil(len(image_paths)/50)
    # Display link for every 50 images, show ctime of the first of those images.
    page_links = [ "<a href='?page=0'>[" + strftime("%Y-%m-%d %H:%M",localtime(getctime(image_paths[1]))) + "]</a>" ]

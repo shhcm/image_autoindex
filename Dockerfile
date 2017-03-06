@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
 	python-imaging\
 	libfreetype6\
 	libfreetype6-dev\
+	libglib2.0-0\
 	vim
 	
 
